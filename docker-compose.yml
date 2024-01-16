@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  fastapi:
+    build:
+      context: .
+      args:
+        USER_UID: ${USER_UID:-1001}
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+    networks:
+      - internal_network
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+    volumes:
+      - ./app:/src
+
+networks:
+  internal_network:
